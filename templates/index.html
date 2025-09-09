@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rule-Based Chatbot</title>
+    <style>
+        body { font-family: Arial; max-width: 500px; margin: auto; }
+        #chatbox { border:1px solid #ccc; height:300px; overflow-y:scroll; margin-bottom: 10px;}
+        .user-msg { color: blue; }
+        .bot-msg { color: green; }
+    </style>
+</head>
+<body>
+    <h2>Mental Health Chatbot</h2>
+    <div id="chatbox"></div>
+    <input type="text" id="message" placeholder="Type your message" autofocus>
+    <button onclick="sendMessage()">Send</button>
+    <script>
+        const chatbox = document.getElementById('chatbox');
+        const messageInput = document.getElementById('message');
+
+        function appendMessage(text, sender) {
+            const p = document.createElement('p');
+            p.textContent = text;
+            p.className = sender === 'user' ? 'user-msg' : 'bot-msg';
+            chatbox.appendChild(p);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            appendMessage('You: ' + message, 'user');
+            messageInput.value = '';
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+            const data = await response.json();
+            appendMessage('Bot: ' + data.response, 'bot');
+        }
+
+        messageInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
