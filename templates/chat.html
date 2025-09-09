@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vesper | AI CHATBOT</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="container chat-bg">
+    <div class="header-block" style="margin-bottom: 25px;">
+      <span class="vesper-title">Vesper</span>
+      <span class="vesper-sub">AI CHATBOT</span>
+    </div>
+    <div class="chatbox-section">
+      <div class="chat-container" id="chatbox"></div>
+      <div class="chat-input-box">
+        <input type="text" id="message" class="input" placeholder="Type your message" autofocus />
+        <button onclick="sendMessage()" class="outer-cont flex">Send</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const chatbox = document.getElementById('chatbox');
+  const messageInput = document.getElementById('message');
+
+  function appendMessage(text, sender) {
+    const bubble = document.createElement('div');
+    bubble.textContent = text;
+    bubble.className = sender === 'user' ? 'user-bubble' : 'bot-bubble';
+    chatbox.appendChild(bubble);
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const message = messageInput.value.trim();
+    if (!message) return;
+    appendMessage('You: ' + message, 'user');
+    messageInput.value = '';
+
+    const response = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message })
+    });
+
+    const data = await response.json();
+    appendMessage(data.response, 'bot');
+  }
+
+  messageInput.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
+</script>
+</body>
+</html>
