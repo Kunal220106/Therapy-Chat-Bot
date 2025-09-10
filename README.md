@@ -28,20 +28,6 @@ The system is served via a **Flask web app** with a simple chat-style frontend.
 
 ---
 
-## 📂 Project Structure
-├── mentalhealth.csv # Dataset of Q&A pairs
-├── model_files/ # Saved models, tokenizers, and encoders
-│ ├── tfidf_vectorizer.pkl
-│ ├── cnn_model.h5
-│ ├── tokenizer.pkl
-│ ├── label_encoder.pkl
-│ └── seq2seq_model.h5
-├── app.py # Flask backend
-├── static/ # Frontend JS/CSS
-├── templates/ # Chat UI HTML
-└── README.md # Project documentation
-
---
 
 ## ⚙️ How It Works
 
